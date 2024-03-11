@@ -1,49 +1,31 @@
-window.addEventListener('load', (event) => {
-  let clock;
+document.addEventListener('DOMContentLoaded', function() {
+    // Set the end date and time for the countdown (March 25, 2024, at 11:59 PM in Los Angeles timezone)
+    const endDate = moment.tz("2024-03-25 23:59", "America/Los_Angeles");
 
-  // Grab the current date
-  let currentDate = new Date();
-
-  // Target future date/24 hour time/Timezone
-  let targetDate = moment.tz("2024-06-01 23:59", "Australia/Sydney");
-
-  // Calculate the difference in seconds between the future and current date
-  let diff = targetDate / 1000 - currentDate.getTime() / 1000;
-
-  if (diff <= 0) {
-    // If remaining countdown is 0
-    clock = (".clock").FlipClock(0, {
-      clockFace: "DailyCounter",
-      countdown: true,
-      autostart: false
+    // Initialize FlipClock
+    const clock = $('#countdown-timer').FlipClock({
+        clockFace: 'DailyCounter',
+        autoStart: false,
+        countdown: true,
+        showSeconds: true
     });
-    console.log("Date has already passed!")
-    
-  } else {
-    // Run countdown timer
-    clock = $(".clock").FlipClock(diff, {
-      clockFace: "DailyCounter",
-      countdown: true,
-      callbacks: {
-        stop: function() {
-          console.log("Timer has ended!")
-        }
-      }
-    });
-    
-    // Check when timer reaches 0, then stop at 0
-    setTimeout(function() {
-      checktime();
-    }, 1000);
-    
-    function checktime() {
-      t = clock.getTime();
-      if (t <= 0) {
-        clock.setTime(0);
-      }
-      setTimeout(function() {
-        checktime();
-      }, 1000);
+
+    // Function to update the countdown timer
+    function updateCountdown() {
+        // Get the current date and time
+        const now = moment();
+
+        // Calculate the difference between the end date and the current date
+        const diff = endDate.diff(now);
+
+        // Update the countdown timer
+        clock.setTime(diff / 1000); // Convert milliseconds to seconds
+        clock.start();
+
+        // Update the countdown every second
+        setTimeout(updateCountdown, 1000);
     }
-  }
+
+    // Initial call to update the countdown timer
+    updateCountdown();
 });
