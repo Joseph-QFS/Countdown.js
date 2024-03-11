@@ -1,24 +1,29 @@
-# Compiled class file
-*.class
+document.addEventListener('DOMContentLoaded', function() {
+    const countdownElement = document.getElementById('countdown-timer');
 
-# Log file
-*.log
+    // Set the end date and time for the countdown (March 25, 2024, at 11:00 PM in Los Angeles timezone)
+    const endDate = new Date(countdownElement.dataset.date); // Adjust timezone accordingly
 
-# BlueJ files
-*.ctxt
+    // Function to update the countdown timer
+    function updateCountdown() {
+        const now = new Date().getTime(); // Get the current date and time
+        const distance = endDate - now; // Calculate the difference between the end date and the current date
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+        // Calculate days, hours, minutes, and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+        // Display the countdown timer
+        countdownElement.innerHTML = `
+            Countdown: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds
+        `;
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+        // Update the countdown every second
+        setTimeout(updateCountdown, 1000);
+    }
+
+    // Initial call to update the countdown timer
+    updateCountdown();
+});
